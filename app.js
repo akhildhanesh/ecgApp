@@ -4,7 +4,7 @@ const userRouter = require('./routers/user')
 const doctorRouter = require('./routers/doctor')
 require('./db/config')
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8081
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
