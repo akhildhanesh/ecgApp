@@ -1,0 +1,27 @@
+<div class="absolute top-0 right-0 m-4">
+    <a href="/doctor/logout">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+    </a>
+</div>
+
+<div class="bg-white p-8 rounded shadow-lg text-center">
+    <h2 class="text-3xl font-bold mb-4">Choose Patient</h2>
+
+    <!-- Patient list -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {{#each patients}}
+        <!-- Dynamic patient card -->
+        <div class="bg-blue-100 p-4 rounded-md shadow-md cursor-pointer hover:shadow-lg">
+            <h3 class="text-lg font-bold mb-2">{{this.name}}</h3>
+            <p class="text-sm text-gray-600">Age: {{this.age}} | Sex: {{this.sex}}</p>
+            <button class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="select('{{this.username}}')">Select</button>
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+<script>
+    const select = username => {
+        window.location = `/doctor/patient/${username}`
+    }
+</script>

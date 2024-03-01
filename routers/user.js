@@ -1,0 +1,128 @@
+const express = require('express')
+const userRouter = express.Router()
+const UserAuthentication = require('../models/userAuthenticationModel')
+const User = require('../models/userModel')
+const { genSalt, hash, compare } = require('bcrypt')
+const session = require('express-session')
+const { isAuthenticated } = require('../middleware/userAuthentication')
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads'); // Set the destination folder for uploads
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + file.originalname); // Set a unique filename
+    },
+});
+
+userRouter.use('/uploads', express.static('uploads'))
+
+const upload = multer({ storage: storage });
+require('dotenv').config()
+
+userRouter.use(session({
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+        maxAge: 3.6e+6
+    },
+    resave: true,
+    saveUninitialized: true
+}))
+
+userRouter.get('/', isAuthenticated, (req, res) => {
+    User.findOne({ username: req.session.userName })
+        .then(data => {
+            if (data === null) {
+                return res.render('addDetails')
+            }
+            return res.render('home', data)
+        })
+})
+
+userRouter.get('/login', (req, res) => {
+    if (!req.session.UserLoggedIn) {
+        res.render('userLogin')
+    } else {
+        res.redirect('/')
+    }
+})
+
+userRouter.post('/login', (req, res) => {
+    const { username, password } = req.body
+    UserAuthentication.findOne({ username })
+        .then(async data => {
+            if (await compare(password, data.password)) {
+                req.session.UserLoggedIn = true
+                req.session.userName = username
+                if (req.session.path == undefined) {
+                    return res.redirect('/')
+                }
+                return res.redirect(req.session.path)
+            } else {
+                return res.status(401).render('userLogin', {
+                    comment: 'Incorrect Username or Password'
+                })
+            }
+
+        })
+        .catch(() => {
+            return res.status(401).render('userLogin', {
+                comment: 'Incorrect Username or Password'
+            })
+        })
+})
+
+userRouter.get('/signUp', (req, res) => {
+    res.render('userSignUp')
+})
+
+userRouter.post('/signUp', async (req, res) => {
+    const { username, password } = req.body
+    console.log(username, password)
+    const hashedPassword = await hash(password, await genSalt(10))
+    new UserAuthentication({
+        username,
+        password: hashedPassword
+    }).save()
+        .then(() => {
+            console.log('saved')
+            res.render('userCreated')
+        })
+        .catch(err => {
+            console.error(`user creation failed: ${err.message}`)
+            res.render('error', {
+                error: `${err.message}`
+            })
+        })
+})
+
+userRouter.post('/addDetails', upload.single('profileImage'), (req, res) => {
+    new User({
+        username: req.session.userName,
+        ...req.body,
+        image: req.file.path
+    }).save()
+        .then(() => {
+            return res.redirect('/')
+        })
+        .catch(() => {
+            res.render('addDetails')
+        })
+})
+
+userRouter.post('/uploadECG', upload.single('ecgImage'), (req, res) => {
+    User.findOneAndUpdate({ username: req.session.userName }, {ecg: req.file.path})
+        .then(() => {
+        res.render('uploaded')
+        })
+        .catch(err => {
+        res.redirect('/')
+    })
+})
+
+userRouter.get('/logout', isAuthenticated, (req, res) => {
+    req.session.UserLoggedIn = false
+    res.redirect('/login')
+})
+
+module.exports = userRouter
