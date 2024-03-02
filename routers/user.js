@@ -110,6 +110,28 @@ userRouter.post('/addDetails', upload.single('profileImage'), (req, res) => {
         })
 })
 
+userRouter.post('/editDetails', upload.single('profileImage'), (req, res) => {
+    if (req.file?.path) {
+        req.body.image = req.file.path
+    }
+    User.findOneAndUpdate({ username: req.session.userName }, {
+        ...req.body,
+    })
+        .then(() => {
+            return res.redirect('/')
+        })
+        .catch(() => {
+            res.render('addDetails')
+        })
+})
+
+userRouter.get('/editDetails', upload.single('profileImage'), (req, res) => {
+    User.findOne({ username: req.session.userName })
+        .then(data => {
+            res.render('editDetails', data)
+    })
+})
+
 userRouter.post('/uploadECG', upload.single('ecgImage'), (req, res) => {
     User.findOneAndUpdate({ username: req.session.userName }, {ecg: req.file.path})
         .then(() => {
