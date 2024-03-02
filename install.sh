@@ -17,3 +17,8 @@ sudo apt-get install -y mongodb-org
 sudo systemctl start mongod
 sudo systemctl status mongod
 sudo systemctl enable mongod
+cd ~
+curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install nodejs
+node -v
