@@ -132,14 +132,26 @@ userRouter.get('/editDetails', upload.single('profileImage'), (req, res) => {
     })
 })
 
-userRouter.post('/uploadECG', upload.single('ecgImage'), (req, res) => {
-    User.findOneAndUpdate({ username: req.session.userName }, {ecg: req.file.path})
+// userRouter.post('/uploadECG', upload.single('ecgImage'), (req, res) => {
+//     User.findOneAndUpdate({ username: req.session.userName }, {ecg: req.file.path})
+//         .then(() => {
+//         res.render('uploaded')
+//         })
+//         .catch(err => {
+//         res.redirect('/')
+//     })
+// })
+
+userRouter.post('/uploadECG', upload.array('ecgImage'), (req, res) => {
+    const paths = req.files.map(file => file.path)
+    User.findOneAndUpdate({ username: req.session.userName }, { ecg: paths })
         .then(() => {
-        res.render('uploaded')
+            res.render('uploaded')
         })
         .catch(err => {
-        res.redirect('/')
-    })
+            console.log(err)
+            res.redirect('/')
+        })
 })
 
 userRouter.get('/logout', isAuthenticated, (req, res) => {

@@ -16,9 +16,15 @@
             <p class="text-sm text-gray-600">Age: {{age}} | Sex: {{sex}}</p>
             <p class="text-sm text-gray-600">Height: {{height}} cm | Weight: {{weight}} kg</p>
         </div>
-        <a href="{{ecg}}" target="_blank">
-            <img src="{{ecg}}" alt="{{name}} ECG Screenshot" class="mb-2 rounded-md" width="200px">
-        </a>
+
+        <div class="text-center">
+            {{#each ecg}}
+            <a href="{{this}}" target="_blank">
+                <img src="{{this}}" alt="{{this}} ECG Screenshot" class="mb-2 rounded-md" width="200px">
+            </a>
+            {{/each}}
+        </div>
+
         <a href="/doctor" class="text-blue-500 hover:underline">Back to All Patients</a>
 
     </div>

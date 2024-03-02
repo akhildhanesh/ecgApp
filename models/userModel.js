@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     ecg: {
-        type: String,
+        type: Array,
     }
 })
 
