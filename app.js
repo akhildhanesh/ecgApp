@@ -3,6 +3,10 @@ const app = express()
 const userRouter = require('./routers/user')
 const doctorRouter = require('./routers/doctor')
 require('./db/config')
+const { mkdir } = require('node:fs/promises')
+
+mkdir('uploads')
+    .catch(() => { })
 
 const PORT = process.env.PORT || 8081
 
