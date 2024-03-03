@@ -76,6 +76,19 @@ userRouter.get('/signUp', (req, res) => {
     res.render('userSignUp')
 })
 
+userRouter.post('/verify', (req, res) => {
+    const { username } = req.body
+    UserAuthentication.findOne({ username })
+        .then(data => {
+            console.log(username, data)
+            if (data === null) return res.send()
+            return res.send('Sorry, the username is already taken')
+        })
+        .catch(err => {
+        return res.send(err.message)
+    })
+})
+
 userRouter.post('/signUp', async (req, res) => {
     const { username, password } = req.body
     console.log(username, password)
@@ -90,9 +103,9 @@ userRouter.post('/signUp', async (req, res) => {
         })
         .catch(err => {
             console.error(`user creation failed: ${err.message}`)
-            res.render('error', {
-                error: `${err.message}`
-            })
+            // res.render('error', {
+            //     error: `${err.message}`
+            // })
         })
 })
 

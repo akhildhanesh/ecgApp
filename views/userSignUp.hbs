@@ -6,8 +6,9 @@
         <form action="/signUp" method="post">
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
-                <input type="text" id="username" name="username"
+                <input type="text" id="username" name="username" oninput="verify()"
                     class="border rounded w-full py-2 px-3 focus:outline-none focus:border-blue-500" required>
+                <p id="alert" style="color: red;"></p>
             </div>
 
             <div class="mb-4">
@@ -29,3 +30,14 @@
     </div>
 
 </body>
+
+<script>
+    const verify = () => {
+        axios.post('/verify', {
+            username: document.getElementById('username').value
+        })
+        .then(({data}) => {
+            document.getElementById('alert').innerText = data
+        })
+    }
+</script>
