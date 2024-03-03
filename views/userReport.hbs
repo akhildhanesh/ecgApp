@@ -4,20 +4,18 @@
     </a>
 </div>
 
-<body
-    class="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+<body class="flex flex-col items-center justify-center h-screen bg-gradient-to-r mt-20 pt-20">
 
     <div class="bg-white p-8 rounded shadow-lg text-center">
-        <h2 class="text-3xl font-bold mb-4">{{name}}</h2>
+        <h2 class="text-3xl font-bold mb-4" style="text-transform: uppercase;">{{name}}</h2>
 
-        <!-- Patient details -->
         <div class="mb-4">
             <img src="{{image}}" alt="{{name}} Image" class="mx-auto mb-2 rounded-md" width="100px">
             <p class="text-sm text-gray-600">Age: {{age}} | Sex: {{sex}}</p>
             <p class="text-sm text-gray-600">Height: {{height}} cm | Weight: {{weight}} kg</p>
         </div>
 
-        <div class="text-center">
+        <div class="text-center p-8">
             {{#each ecg}}
             <a href="{{this}}" target="_blank">
                 <img src="{{this}}" alt="{{this}} ECG Screenshot" class="mb-2 rounded-md" width="200px">

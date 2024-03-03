@@ -80,7 +80,6 @@ userRouter.post('/verify', (req, res) => {
     const { username } = req.body
     UserAuthentication.findOne({ username })
         .then(data => {
-            console.log(username, data)
             if (data === null) return res.send()
             return res.send('Sorry, the username is already taken')
         })
@@ -99,7 +98,10 @@ userRouter.post('/signUp', async (req, res) => {
     }).save()
         .then(() => {
             console.log('saved')
-            res.render('userCreated')
+            // res.render('userCreated')
+            req.session.UserLoggedIn = true
+            req.session.userName = username
+            res.redirect('/')
         })
         .catch(err => {
             console.error(`user creation failed: ${err.message}`)
