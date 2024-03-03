@@ -8,10 +8,10 @@ const { isAuthenticated } = require('../middleware/userAuthentication')
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads'); // Set the destination folder for uploads
+        cb(null, 'uploads'); 
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname); // Set a unique filename
+        cb(null, Date.now() + file.originalname);
     },
 });
 
