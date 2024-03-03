@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8080
 
 const { exec } = require('child_process');
 
-const commandToRun = './Program.exe';
+const commandToRun = './SoundCardECG.exe';
 
 app.use(cors())
 
