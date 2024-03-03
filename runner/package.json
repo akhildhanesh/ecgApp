@@ -4,6 +4,7 @@
   "description": "",
   "main": "run.js",
   "scripts": {
+    "start": "pm2 start run.js",
     "dev": "npm i && npm i -g pm2 && pm2 start run.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
