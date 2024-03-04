@@ -1,7 +1,7 @@
 const express = require('express')
 const doctorRouter = express.Router()
 const DoctorAuthentication = require('../models/doctorAuthenticationModel')
-const { isDoctorAuthenticated } = require('../middleware/userAuthentication')
+const { isDoctorAuthenticated, isAuthenticated } = require('../middleware/userAuthentication')
 const User = require('../models/userModel')
 const { genSalt, hash, compare } = require('bcrypt')
 const session = require('express-session')
@@ -23,7 +23,7 @@ doctorRouter.use(session({
     saveUninitialized: true
 }))
 
-doctorRouter.use('/patient/uploads', express.static('uploads'))
+doctorRouter.use('/patient/uploads', isDoctorAuthenticated, express.static('uploads'))
 
 doctorRouter.get('/', isDoctorAuthenticated, (req, res) => {
     User.find()

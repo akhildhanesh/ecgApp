@@ -15,8 +15,6 @@ const storage = multer.diskStorage({
     },
 });
 
-userRouter.use('/uploads', express.static('uploads'))
-
 const upload = multer({ storage: storage });
 require('dotenv').config()
 
@@ -28,6 +26,8 @@ userRouter.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+userRouter.use('/uploads', isAuthenticated, express.static('uploads'))
 
 userRouter.get('/', isAuthenticated, (req, res) => {
     User.findOne({ username: req.session.userName })
