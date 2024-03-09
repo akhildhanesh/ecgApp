@@ -56,7 +56,7 @@ doctorRouter.post('/login', (req, res) => {
         .then(async data => {
             if (await compare(password, data.password)) {
                 req.session.DoctorLoggedIn = true
-                req.session.userName = username
+                req.session.doctorName = username
                 if (req.session.path == undefined) {
                     return res.redirect('/doctor')
                 }
@@ -100,8 +100,30 @@ doctorRouter.post('/signUp', async (req, res) => {
         })
 })
 
+doctorRouter.post('/comment/:username', isDoctorAuthenticated, async (req, res) => {
+    const { chats } = req.body
+    User.findOneAndUpdate({ username: req.params.username }, { $push: { chats: { name: req.session.doctorName, msg: chats } } }, { new: true })
+        .then(updatedData => {
+            res.json(updatedData.chats)
+        })
+        .catch(err => {
+            console.error(err.message)
+            res.status(500).json({
+                error: err.message
+            })
+        })
+})
+
+doctorRouter.get('/comment/:username', isDoctorAuthenticated, async (req, res) => {
+    const data = await User.findOne({ username: req.params.username })
+    res.render('comments', {
+        chats: data.chats
+    })
+})
+
 doctorRouter.get('/logout', isDoctorAuthenticated, (req, res) => {
     req.session.DoctorLoggedIn = false
+    req.session.destroy()
     res.redirect('/doctor/login')
 })
 

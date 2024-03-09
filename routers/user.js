@@ -8,7 +8,7 @@ const { isAuthenticated } = require('../middleware/userAuthentication')
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads'); 
+        cb(null, 'uploads');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + file.originalname);
@@ -84,8 +84,8 @@ userRouter.post('/verify', (req, res) => {
             return res.send('Sorry, the username is already taken')
         })
         .catch(err => {
-        return res.send(err.message)
-    })
+            return res.send(err.message)
+        })
 })
 
 userRouter.post('/signUp', async (req, res) => {
@@ -144,7 +144,7 @@ userRouter.get('/editDetails', upload.single('profileImage'), (req, res) => {
     User.findOne({ username: req.session.userName })
         .then(data => {
             res.render('editDetails', data)
-    })
+        })
 })
 
 // userRouter.post('/uploadECG', upload.single('ecgImage'), (req, res) => {
@@ -167,6 +167,27 @@ userRouter.post('/uploadECG', upload.array('ecgImage'), (req, res) => {
             console.log(err)
             res.redirect('/')
         })
+})
+
+userRouter.post('/comment', isAuthenticated, async (req, res) => {
+    const { chats } = req.body
+    User.findOneAndUpdate({ username: req.session.userName }, { $push: { chats: { name: req.session.userName, msg: chats } } }, { new: true })
+        .then(updatedData => {
+            res.json(updatedData.chats)
+        })
+        .catch(err => {
+            console.error(err.message)
+            res.status(500).json({
+                error: err.message
+            })
+        })
+})
+
+userRouter.get('/comment', isAuthenticated, async (req, res) => {
+    const data = await User.findOne({ username: req.session.userName })
+    res.render('comments', {
+        chats: data.chats
+    })
 })
 
 userRouter.get('/logout', isAuthenticated, (req, res) => {

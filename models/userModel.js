@@ -31,6 +31,9 @@ const userSchema = new mongoose.Schema({
     },
     ecg: {
         type: Array,
+    },
+    chats: {
+        type: Array,
     }
 })
 
