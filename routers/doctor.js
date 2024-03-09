@@ -100,7 +100,7 @@ doctorRouter.post('/signUp', async (req, res) => {
         })
 })
 
-doctorRouter.post('/comment/:username', isDoctorAuthenticated, async (req, res) => {
+doctorRouter.post('/patient/comment/:username', isDoctorAuthenticated, async (req, res) => {
     const { chats } = req.body
     User.findOneAndUpdate({ username: req.params.username }, { $push: { chats: { name: req.session.doctorName, msg: chats } } }, { new: true })
         .then(updatedData => {
@@ -114,7 +114,7 @@ doctorRouter.post('/comment/:username', isDoctorAuthenticated, async (req, res) 
         })
 })
 
-doctorRouter.get('/comment/:username', isDoctorAuthenticated, async (req, res) => {
+doctorRouter.get('/patient/comment/:username', isDoctorAuthenticated, async (req, res) => {
     const data = await User.findOne({ username: req.params.username })
     res.render('comments', {
         chats: data.chats
