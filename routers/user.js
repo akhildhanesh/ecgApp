@@ -41,7 +41,7 @@ userRouter.get('/', isAuthenticated, (req, res) => {
 
 userRouter.get('/login', (req, res) => {
     if (!req.session.UserLoggedIn) {
-        res.render('userLogin')
+        res.status(401).render('userLogin')
     } else {
         res.redirect('/')
     }
@@ -186,6 +186,13 @@ userRouter.post('/comment', isAuthenticated, async (req, res) => {
 userRouter.get('/comment', isAuthenticated, async (req, res) => {
     const data = await User.findOne({ username: req.session.userName })
     res.render('comments', {
+        chats: data.chats
+    })
+})
+
+userRouter.get('/comment/get', isAuthenticated, async (req, res) => {
+    const data = await User.findOne({ username: req.session.userName })
+    res.render('renderComments', {
         chats: data.chats
     })
 })

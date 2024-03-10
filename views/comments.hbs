@@ -2,20 +2,22 @@
     <div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
         <h1 class="text-2xl font-semibold mb-4">Comments</h1>
 
-        <div class="space-y-4">
-            {{#each chats}}
-            <div class="flex items-start space-x-4">
-                <div class="flex-shrink-0">
-                    <img
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACUUlEQVR4nO2Zz0tVURDHP+hbKBmkGZi6zZ20sRRalP0JIdE/kVtTXJZufWi0jkAXZUavZf4RPvwHShflr60awYkLE4Rgd86cufe+6H7hC4/73v3OzDlz5pwzD2rUqOGBLmAKWAA2gV3gBPghPJFn74B5YFLeqRyjwDKwD4RI7gFLwEgVjl8HXgHnBscv8gx4CQyU5fwT4MjB8Ys8BB4X6XhDRj0UzDWx5YpeoFWC80H4UWy6oBt4X6LzQdjymoky0iZcwlWPBRsq5kxKqbRWmw/AfeCK8IHktUXrAOgvM3Xm/qK5UFYqjRo3qWzk89AybnbDMQEsG0cqS5s8TBu1X2idzw5ZX41G+hT6V43a+1LSczFlNFB0AAG4qwnAutCCVJs8PEzQn9MEsJlgICuVefiUoP9WE8BugoEgM3gZFhO125oAjhONBCmV07Im+iRtUkY+/HHkzoXHJaUonv0XARx3gKMhJYVSF3GRbHuX0XVgEDsGgQ3vMjofIZji/G/c8N7IJiMEPa58jQh7E9rD3J5ScNwhgNtKW19iunlLStHXDgG8Udp6HiM6IjXXLS8T19tp7IUGafdpc3MLuBWhPSbvBCWbGC/1hxFGfgKfgafAPWAI6BEOybNZYFt+q9X9br3UI73KUDEfkYi1Cp1fwQHdiZecyluLSKPV2pgKxvZML85oSIOpaOeb2u6DFTNSGbwd/+axYLXol9nQbnZ5m1QTuEYFGJaOmaURlp1tsuPBTToAXdJ0eiZn9rbc7M6F2ecd+S47etzplL9Za9TgH8cv49MbTZ3pRpUAAAAASUVORK5CYII=">
+        <section id="chats">
+            <div class="space-y-4">
+                {{#each chats}}
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACUUlEQVR4nO2Zz0tVURDHP+hbKBmkGZi6zZ20sRRalP0JIdE/kVtTXJZufWi0jkAXZUavZf4RPvwHShflr60awYkLE4Rgd86cufe+6H7hC4/73v3OzDlz5pwzD2rUqOGBLmAKWAA2gV3gBPghPJFn74B5YFLeqRyjwDKwD4RI7gFLwEgVjl8HXgHnBscv8gx4CQyU5fwT4MjB8Ys8BB4X6XhDRj0UzDWx5YpeoFWC80H4UWy6oBt4X6LzQdjymoky0iZcwlWPBRsq5kxKqbRWmw/AfeCK8IHktUXrAOgvM3Xm/qK5UFYqjRo3qWzk89AybnbDMQEsG0cqS5s8TBu1X2idzw5ZX41G+hT6V43a+1LSczFlNFB0AAG4qwnAutCCVJs8PEzQn9MEsJlgICuVefiUoP9WE8BugoEgM3gZFhO125oAjhONBCmV07Im+iRtUkY+/HHkzoXHJaUonv0XARx3gKMhJYVSF3GRbHuX0XVgEDsGgQ3vMjofIZji/G/c8N7IJiMEPa58jQh7E9rD3J5ScNwhgNtKW19iunlLStHXDgG8Udp6HiM6IjXXLS8T19tp7IUGafdpc3MLuBWhPSbvBCWbGC/1hxFGfgKfgafAPWAI6BEOybNZYFt+q9X9br3UI73KUDEfkYi1Cp1fwQHdiZecyluLSKPV2pgKxvZML85oSIOpaOeb2u6DFTNSGbwd/+axYLXol9nQbnZ5m1QTuEYFGJaOmaURlp1tsuPBTToAXdJ0eiZn9rbc7M6F2ecd+S47etzplL9Za9TgH8cv49MbTZ3pRpUAAAAASUVORK5CYII=">
+                    </div>
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <div class="font-semibold text-gray-800">{{this.name}}:</div>
+                        <div class="text-gray-700">{{this.msg}}</div>
+                    </div>
                 </div>
-                <div class="bg-gray-100 p-3 rounded-lg">
-                    <div class="font-semibold text-gray-800">{{this.name}}:</div>
-                    <div class="text-gray-700">{{this.msg}}</div>
-                </div>
+                {{/each}}
             </div>
-            {{/each}}
-        </div>
+        </section>
 
         <div class="mt-6">
             <label for="comment" class="block text-sm font-medium text-gray-700">
@@ -49,8 +51,16 @@
     }
 
     setInterval(() => {
-        if (document.getElementById('comment').value.length === 0) {
+        /*!-- if (document.getElementById('comment').value.length === 0) {
             location.reload()
-        }
-    }, 5000)
+        } */
+        axios.get(`${location.href}/get`)
+        .then(data => {
+            if (data.status == 200) {
+                document.getElementById('chats').innerHTML = data.data
+            } else {
+                location.reload()
+            }
+        })
+    }, 2000)
 </script>

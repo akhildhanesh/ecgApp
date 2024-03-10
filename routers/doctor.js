@@ -44,7 +44,7 @@ doctorRouter.get('/patient/:username', (req, res) => {
 
 doctorRouter.get('/login', (req, res) => {
     if (!req.session.DoctorLoggedIn) {
-        res.render('doctorLogin')
+        res.status(401).render('doctorLogin')
     } else {
         res.redirect('/doctor')
     }
@@ -117,6 +117,13 @@ doctorRouter.post('/patient/comment/:username', isDoctorAuthenticated, async (re
 doctorRouter.get('/patient/comment/:username', isDoctorAuthenticated, async (req, res) => {
     const data = await User.findOne({ username: req.params.username })
     res.render('comments', {
+        chats: data.chats
+    })
+})
+
+doctorRouter.get('/patient/comment/:username/get', isDoctorAuthenticated, async (req, res) => {
+    const data = await User.findOne({ username: req.params.username })
+    res.render('renderComments', {
         chats: data.chats
     })
 })
