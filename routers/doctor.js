@@ -78,7 +78,7 @@ doctorRouter.post('/login', (req, res) => {
 
 doctorRouter.post('/patient/comment/:username', isDoctorAuthenticated, async (req, res) => {
     const { chats } = req.body
-    User.findOneAndUpdate({ username: req.params.username }, { $push: { chats: { name: req.session.doctorName, msg: chats } } }, { new: true })
+    User.findOneAndUpdate({ username: req.params.username }, { $push: { chats: { name: `${req.session.doctorName} (Doctor)`, msg: chats } } }, { new: true })
         .then(updatedData => {
             res.json(updatedData.chats)
         })
