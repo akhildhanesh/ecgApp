@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const userRouter = require('./routers/user')
 const doctorRouter = require('./routers/doctor')
+const adminRouter = require('./routers/admin')
 require('./db/config')
 const { mkdir } = require('node:fs/promises')
 
@@ -18,6 +19,7 @@ app.set('view engine', 'hbs')
 
 app.use('/', userRouter)
 app.use('/doctor', doctorRouter)
+app.use('/admin', adminRouter)
 
 app.listen(PORT, () => {
     console.log(`server running on PORT: ${PORT}`)

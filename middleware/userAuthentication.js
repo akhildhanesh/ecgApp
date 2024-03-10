@@ -16,8 +16,17 @@ const isDoctorAuthenticated = (req, res, next) => {
     }
 }
 
+const isAdminAuthenticated = (req, res, next) => {
+    if (req.session.AdminLoggedIn) {
+        next()
+    } else {
+        req.session.path = req._parsedOriginalUrl.path
+        return res.redirect('/admin/login')
+    }
+}
 
 module.exports = {
     isAuthenticated,
-    isDoctorAuthenticated
+    isDoctorAuthenticated,
+    isAdminAuthenticated
 }

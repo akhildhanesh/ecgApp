@@ -1,0 +1,43 @@
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .success-message {
+        text-align: center;
+        opacity: 0;
+        animation: fadeIn 1.5s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="absolute top-0 right-0 m-4">
+    <a href="/admin/logout">
+        <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Logout</button>
+    </a>
+</div>
+
+<body>
+    <div class="success-message">
+        <h1 class="text-3xl font-bold mb-4 text-green-600">Doctor Created!!!</h1>
+    </div>
+</body>
+
+<script>
+    setTimeout(() => {
+        window.location = '/admin'
+    }, 3000)
+</script>

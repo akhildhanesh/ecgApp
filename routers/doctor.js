@@ -76,30 +76,6 @@ doctorRouter.post('/login', (req, res) => {
         })
 })
 
-doctorRouter.get('/signUp', (req, res) => {
-    res.render('userSignUp')
-})
-
-doctorRouter.post('/signUp', async (req, res) => {
-    const { username, password } = req.body
-    console.log(username, password)
-    const hashedPassword = await hash(password, await genSalt(10))
-    new DoctorAuthentication({
-        username,
-        password: hashedPassword
-    }).save()
-        .then(() => {
-            console.log('saved')
-            res.render('userCreated')
-        })
-        .catch(err => {
-            console.error(`user creation failed: ${err.message}`)
-            res.render('error', {
-                error: `${err.message}`
-            })
-        })
-})
-
 doctorRouter.post('/patient/comment/:username', isDoctorAuthenticated, async (req, res) => {
     const { chats } = req.body
     User.findOneAndUpdate({ username: req.params.username }, { $push: { chats: { name: req.session.doctorName, msg: chats } } }, { new: true })
