@@ -4,6 +4,7 @@ const DoctorAuthentication = require('../models/doctorAuthenticationModel')
 const { isAdminAuthenticated } = require('../middleware/userAuthentication')
 const { genSalt, hash, compare } = require('bcrypt')
 const session = require('express-session')
+const doctorAuthenticationModel = require('../models/doctorAuthenticationModel')
 
 require('dotenv').config()
 
@@ -53,7 +54,7 @@ adminRouter.post('/login', async (req, res) => {
     }
 })
 
-adminRouter.post('/create', async (req, res) => {
+adminRouter.post('/create', isAdminAuthenticated, async (req, res) => {
     const { username, password } = req.body
     const hashedPassword = await hash(password, await genSalt(10))
     new DoctorAuthentication({
@@ -82,6 +83,30 @@ adminRouter.post('/verify', (req, res) => {
         .catch(err => {
             return res.send(err.message)
         })
+})
+
+adminRouter.get('/delete', isAdminAuthenticated, (req, res) => {
+    doctorAuthenticationModel.find()
+        .then(data => {
+            const options = data.map(e => e.username)
+            res.render('deleteDoctor', {
+                options
+            })
+        })
+})
+
+adminRouter.post('/delete', isAdminAuthenticated, (req, res) => {
+    const username = req.body.options
+    doctorAuthenticationModel.findOneAndDelete({username})
+        .then(() => {
+           res.redirect('/admin')
+        })
+        .catch(err => {
+            console.error(err.message)
+            res.status(500).json({
+                error: err
+            })
+    })
 })
 
 adminRouter.get('/logout', isAdminAuthenticated, (req, res) => {
