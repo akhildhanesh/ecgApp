@@ -5,11 +5,14 @@ const doctorRouter = require('./routers/doctor')
 const adminRouter = require('./routers/admin')
 require('./db/config')
 const { mkdir } = require('node:fs/promises')
+const { default: helmet } = require('helmet')
 
 mkdir('uploads')
     .catch(() => { })
 
 const PORT = process.env.PORT || 8081
+
+app.use(helmet())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
