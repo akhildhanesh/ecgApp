@@ -41,7 +41,7 @@
     document.getElementById('submit').disabled = true
     const verify = () => {
         axios.post('/admin/verify', {
-            username: document.getElementById('username').value
+            username: document.getElementById('username').value.trim()
         })
             .then(({ data }) => {
                 document.getElementById('alert').innerText = data
