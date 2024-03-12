@@ -17,7 +17,14 @@
                     class="border rounded w-full py-2 px-3 focus:outline-none focus:border-blue-500" required>
             </div>
 
-            <button type="submit"
+            <div class="mb-4" onkeyup="check()">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password"
+                    class="border rounded w-full py-2 px-3 focus:outline-none focus:border-blue-500" required>
+                <p id="msg" style="color: red; font-size: x-small;"></p>
+            </div>
+
+            <button type="submit" id="submit"
                 class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">Sign
                 Up</button>
         </form>
@@ -32,12 +39,23 @@
 </body>
 
 <script>
+    document.getElementById('submit').disabled = true
+
     const verify = () => {
         axios.post('/verify', {
             username: document.getElementById('username').value
         })
-        .then(({data}) => {
-            document.getElementById('alert').innerText = data
-        })
+            .then(({ data }) => {
+                document.getElementById('alert').innerText = data
+            })
+    }
+
+    const check = () => {
+        if (document.getElementById('confirm-password').value === document.getElementById('password').value) {
+            document.getElementById('submit').disabled = false
+        } else {
+            document.getElementById('msg').innerText = `Password does not match`
+            document.getElementById('submit').disabled = true
+        }
     }
 </script>
