@@ -12,7 +12,7 @@ mkdir('uploads')
 
 const PORT = process.env.PORT || 8081
 
-app.use(helmet())
+// app.use(helmet())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
