@@ -24,6 +24,10 @@ app.use('/', userRouter)
 app.use('/doctor', doctorRouter)
 app.use('/admin', adminRouter)
 
+app.use('*', (req, res, next) => {
+    return res.render('404')
+})
+
 app.listen(PORT, () => {
     console.log(`server running on PORT: ${PORT}`)
 })
