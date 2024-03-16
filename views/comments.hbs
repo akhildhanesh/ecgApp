@@ -1,6 +1,6 @@
 <body>
     <div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
-        <h1 class="text-2xl font-semibold mb-4">Comments</h1>
+        <h1 class="text-2xl font-semibold mb-4">Chats</h1>
 
         <section id="chats">
             <div class="space-y-4">
@@ -21,7 +21,7 @@
 
         <div class="mt-6">
             <label for="comment" class="block text-sm font-medium text-gray-700">
-                Add Comment
+                Enter your message
             </label>
             <textarea id="comment" name="comment" rows="3"
                 class="mt-1 p-2 block w-full border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"></textarea>
@@ -55,12 +55,12 @@
             location.reload()
         } */
         axios.get(`${location.href}/get`)
-        .then(data => {
-            if (data.status == 200) {
-                document.getElementById('chats').innerHTML = data.data
-            } else {
-                location.reload()
-            }
-        })
+            .then(data => {
+                if (data.status == 200) {
+                    document.getElementById('chats').innerHTML = data.data
+                } else {
+                    location.reload()
+                }
+            })
     }, 2000)
 </script>
