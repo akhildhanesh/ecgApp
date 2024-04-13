@@ -6,6 +6,7 @@ const { genSalt, hash, compare } = require('bcrypt')
 const session = require('express-session')
 const { isAuthenticated } = require('../middleware/userAuthentication')
 const multer = require('multer')
+const sharp = require('sharp')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads');
@@ -112,22 +113,47 @@ userRouter.post('/signUp', async (req, res) => {
 })
 
 userRouter.post('/addDetails', upload.single('profileImage'), (req, res) => {
-    new User({
-        username: req.session.userName,
-        ...req.body,
-        image: req.file.path
-    }).save()
+    sharp(`./${req.file.path}`)
+        .resize(300)
+        .toFormat('webp')
+        .webp({ quality: 100 })
+        .toFile(`${req.file.path.split('.')[0]}.webp`)
         .then(() => {
-            return res.redirect('/')
+            new User({
+                username: req.session.userName,
+                ...req.body,
+                image: `${req.file.path.split('.')[0]}.webp`
+            }).save()
+                .then(() => {
+                    return res.redirect('/')
+                })
+                .catch(() => {
+                    res.render('addDetails')
+                })
         })
         .catch(() => {
-            res.render('addDetails')
-        })
+            new User({
+                username: req.session.userName,
+                ...req.body,
+                image: `${req.file.path}`
+            }).save()
+                .then(() => {
+                    return res.redirect('/')
+                })
+                .catch(() => {
+                    res.render('addDetails')
+                })
+    })
 })
 
-userRouter.post('/editDetails', upload.single('profileImage'), (req, res) => {
+userRouter.post('/editDetails', upload.single('profileImage'), async (req, res) => {
     if (req.file?.path) {
-        req.body.image = req.file.path
+        await sharp(`./${req.file.path}`)
+            .resize(300)
+            .toFormat('webp')
+            .webp({ quality: 100 })
+            .toFile(`${req.file.path.split('.')[0]}.webp`)
+        req.body.image = `${req.file.path.split('.')[0]}.webp`
     }
     User.findOneAndUpdate({ username: req.session.userName }, {
         ...req.body,
@@ -159,7 +185,15 @@ userRouter.get('/editDetails', upload.single('profileImage'), (req, res) => {
 
 userRouter.post('/uploadECG', upload.array('ecgImage'), (req, res) => {
     const paths = req.files.map(file => file.path)
-    User.findOneAndUpdate({ username: req.session.userName }, { ecg: paths })
+    const newPaths = paths.map(path => {
+        if (path.split('.')[1] === 'webp') return path
+        sharp(`./${path}`)
+            .toFormat('webp')
+            .webp({ quality: 100 })
+            .toFile(`${path.split('.')[0]}.webp`)
+        return `${path.split('.')[0]}.webp`
+    })
+    User.findOneAndUpdate({ username: req.session.userName }, { ecg: newPaths })
         .then(() => {
             res.render('uploaded')
         })
